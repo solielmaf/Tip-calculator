@@ -21,6 +21,7 @@ function App() {
     if (e.target.value === "It was good (10%)") setYourFriend(10);
     if (e.target.value === "Absolutely amazing! (20%)") setYourFriend(20);
   }
+
   return (
     <div>
       <Bill onchange={handleBill} bill={bill} />
@@ -44,7 +45,7 @@ function Bill({ onchange, bill }) {
     </div>
   );
 }
-function Service({ onTip, onSelect, yourFriend, yourTip, children }) {
+function Service({ onTip, yourTip, children }) {
   return (
     <>
       <div>
@@ -59,9 +60,5 @@ function Service({ onTip, onSelect, yourFriend, yourTip, children }) {
     </>
   );
 }
-function TipCalculator({ bill, yourFriend, yourTip }) {
-  const [percent, setPercent] = useState();
-
-  const tip = bill * (yourFriend = "Dissatisified (0%)");
-}
+function TipCalculator({ bill, yourFriend, yourTip }) {}
 export default App;
