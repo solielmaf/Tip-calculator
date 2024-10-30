@@ -3,23 +3,30 @@ import { useState } from "react";
 
 function App() {
   const [bill, setBill] = useState();
-  const [yourTip, setYourTip] = useState("");
-  const [yourFriend, setYourFriend] = useState();
+  const [yourTip, setYourTip] = useState(0);
+  const [yourFriend, setYourFriend] = useState(0);
+  const [tip, setTip] = useState(0);
 
   function handleBill(e) {
-    setBill(e.target.value);
+    setBill(Number(e.target.value));
   }
+
   function handleYourTip(e) {
-    if (e.target.value === "Dissatisified (0%)") setYourTip(0);
-    if (e.target.value === "It was Okay (5%)") setYourTip(5);
-    if (e.target.value === "It was good (10%)") setYourTip(10);
-    if (e.target.value === "Absolutely amazing! (20%)") setYourTip(20);
+    const newYourTip = Number(e.target.value);
+    setYourTip(newYourTip);
+    calculateTip(newYourTip, yourFriend);
   }
+
   function handleFriendTip(e) {
-    if (e.target.value === "Dissatisified (0%)") setYourFriend(0);
-    if (e.target.value === "It was Okay (5%)") setYourFriend(5);
-    if (e.target.value === "It was good (10%)") setYourFriend(10);
-    if (e.target.value === "Absolutely amazing! (20%)") setYourFriend(20);
+    const newYourFriend = Number(e.target.value);
+    setYourFriend(newYourFriend);
+    calculateTip(yourTip, newYourFriend);
+  }
+
+  function calculateTip(yourTip, yourFriend) {
+    const average = (yourFriend + yourTip) / 2;
+
+    setTip((bill * average) / 100);
   }
 
   return (
@@ -31,9 +38,8 @@ function App() {
       <Service onTip={handleFriendTip} yourTip={yourFriend}>
         How did your friend like the Service
       </Service>
-      <TipCalculator bill={bill} yourFriend={yourFriend} yourTip={yourTip} />
-      {yourFriend}
-      {yourTip}
+
+      <TipCalculator tip={tip} bill={bill} />
     </div>
   );
 }
@@ -51,14 +57,21 @@ function Service({ onTip, yourTip, children }) {
       <div>
         {children}
         <select value={yourTip} onChange={onTip}>
-          <option>Dissatisified (0%)</option>
-          <option>It was Okay (5%)</option>
-          <option>It was good (10%)</option>
-          <option>Absolutely amazing! (20%)</option>
+          <option value="0">Dissatisified (0%)</option>
+          <option value="5">It was Okay (5%)</option>
+          <option value="10">It was good (10%)</option>
+          <option value="20">Absolutely amazing! (20%)</option>
         </select>
       </div>
     </>
   );
 }
-function TipCalculator({ bill, yourFriend, yourTip }) {}
+function TipCalculator({ tip, bill }) {
+  if (bill > 0)
+    return (
+      <h1>
+        you pay {bill} + {tip}
+      </h1>
+    );
+}
 export default App;
